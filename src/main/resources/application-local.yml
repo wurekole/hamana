@@ -1,0 +1,14 @@
+spring:
+  cassandra:
+    keyspace-name: ana_kan
+    contact-points: 127.0.0.1
+    port: 9042
+    local-datacenter: datacenter1  # <-- Add this line!
+    schema-action: create-if-not-exists
+    username: kukukan
+    password: anakan
+    connection:
+      init-query-timeout: 10s
+      connect-timeout: 10s
+    request:
+      timeout: 10s
