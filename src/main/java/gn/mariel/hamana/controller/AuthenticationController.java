@@ -1,11 +1,15 @@
 package gn.mariel.hamana.controller;
 
+import gn.mariel.hamana.dto.TenantInputDto;
 import gn.mariel.hamana.model.ApiResponse;
 import gn.mariel.hamana.model.TenantAuthenticationRequest;
 import gn.mariel.hamana.model.UserAuthenticationRequest;
+import gn.mariel.hamana.service.TenantService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,11 +21,24 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class AuthenticationController {
     private final ModelMapper modelMapper;
+    private final TenantService tenantService;
 
-    @PostMapping("tenant")
-    public Mono<ApiResponse> authenticateTenant(@RequestBody @Valid TenantAuthenticationRequest request){
+    @PostMapping(value = "tenant",consumes = MediaType.APPLICATION_JSON_VALUE)
+    public Mono<ResponseEntity<ApiResponse>> authenticateTenant(@RequestBody TenantAuthenticationRequest request){
 
-        return Mono.just(null);
+        var dto = TenantInputDto.builder()
+                .ou(request.getOu())
+                .dc(request.getDc())
+                .name(request.getName())
+                .build();
+
+        var result = tenantService.createTenant(dto);
+
+        var apiResponse = ApiResponse.builder()
+                .result(result)
+                .build();
+
+        return Mono.just(ResponseEntity.ok(apiResponse));
     }
 
     @PostMapping("users")

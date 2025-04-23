@@ -3,6 +3,8 @@ package gn.mariel.hamana.model;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class TenantAuthenticationRequest {
     @NotBlank(message = "principal is required.")
@@ -10,4 +12,9 @@ public class TenantAuthenticationRequest {
 
     @NotBlank(message = "secret is required.")
     private String secret;
+
+    private String ou;
+    private List<String> dc;
+
+    private String name;
 }
